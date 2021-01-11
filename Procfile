@@ -1,0 +1,1 @@
+web: gunicorn MMblog.wsgi --log-file -

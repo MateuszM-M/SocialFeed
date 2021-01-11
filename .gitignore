@@ -1,0 +1,9 @@
+*.pyc
+*~
+__pycache__
+venv
+.DS_Store
+SFCD.docx
+~*
+db.sqlite3
+/media
