@@ -28,6 +28,7 @@ SECRET_KEY = os.environ.get('SOCIALFEED_SECRET_KEY')
 # Application definition
 
 INSTALLED_APPS = [
+    'Accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -103,6 +104,13 @@ USE_L10N = True
 USE_TZ = True
 
 
+# URL login redirect
+
+LOGIN_REDIRECT_URL = 'Accounts:dashboard'
+LOGIN_URL = 'Accounts:login'
+LOGOUT_URL = 'Accounts:logout'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
@@ -117,3 +125,4 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = 'media'
+

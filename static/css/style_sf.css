@@ -1,0 +1,37 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body{
+  background-color: #f0f2f5;
+  color: #1c2b35;
+  font-family: Helvetica, Tahoma, Verdana, sans-serif;
+  font-size: 20px;
+  height: 100%;
+  margin-bottom: 60px;
+}
+
+#logo{
+  color: #f0f2f5;
+}
+
+.container{
+  min-height: 100%;
+}
+
+
+.footer {
+  background-color: #fff;
+  position: absolute;
+  bottom: 0;
+  height: 40px;
+  line-height: 60px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+#profile_pic{
+  max-width: 60%;
+}

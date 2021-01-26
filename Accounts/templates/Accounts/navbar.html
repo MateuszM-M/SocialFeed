@@ -1,0 +1,35 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div id="logo">
+        <a href="{% url 'Accounts:dashboard' %}" class="btn text-white">SocialFeed</a>
+    </div>
+
+    {% if request.user.is_authenticated %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            Search
+            <ul class="navbar-nav mx-auto">
+                <li class="small nav-item"><a href="{% url 'Accounts:dashboard' %}" class="nav-link text-white btn">Home</a></li>
+            </ul>
+            <ul class="navbar-nav ">
+                <!--<li class="nav-item text-secondary small nav-link">Hi, {{ request.user }}</li> -->
+                <li class="nav-item dropdown">
+						<a href="#" class="nav-link nav-item dropdown-toggle small text-white mr-2" data-toggle="dropdown" role="button" aria-expanded="false" id="submenu" aria-haspopup="true">Profile</a>
+
+						<div class="dropdown-menu" aria-labelledby="submenu">
+							<a href="{% url 'Accounts:profile_view' username=user %}" class="dropdown-item">View profile</a>
+							<a href="{% url 'Accounts:edit_profile' %}" class="dropdown-item">Edit profile</a>
+							<a href="{% url 'Accounts:password_change' %}" class="dropdown-item">Change password</a>
+							<div class="dropdown-divider"></div>
+							<a href="{% url 'Accounts:logout' %}" class="dropdown-item">Logout</a>
+						</div>
+					</li>
+                <li class="small nav-item"><a href="{% url 'Accounts:logout' %}" class="nav-link text-white mr-4">Logout</a></li>
+            </ul>
+        </div>
+    {% endif %}
+</nav>

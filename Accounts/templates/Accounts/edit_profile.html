@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+
+{% block title %}Register on SocialFeed{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6 my-5 py-lg-5">
+        <header>
+            <p class=" h3 text-center">Edit profile</p>
+        </header>
+    </div>
+
+    <div class="bg-white col-md-8 col-lg-5 rounded my-lg-5 text-center mx-auto small">
+        <form action="" method="POST" class="mt-3" enctype="multipart/form-data">
+            {{ profile_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Change" class="btn btn-primary px-5 form-control"></p>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

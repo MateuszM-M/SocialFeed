@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+
+{% block title %}SocialFeed - Log In or Sign Up{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6 my-5 py-lg-5">
+        <header>
+            <p class=" h3 text-center">Find your friends and connect the world on SocialFeed.</p>
+        </header>
+    </div>
+
+    <div class="bg-white col-md-8 col-lg-5   rounded my-lg-5 text-center mx-auto">
+        <form action="{% url 'Accounts:login' %}" method="POST" class="mt-3">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Log In" class="btn btn-primary px-5 form-control"></p>
+        </form>
+        <a href="{% url 'Accounts:password_reset' %}" class="small">Forgot password?</a>
+        <hr>
+        <a href="{% url 'Accounts:register' %}" class="btn btn-success px-5 mb-3">Create new account</a>
+    </div>
+</div>
+
+
+{% endblock %}

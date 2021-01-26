@@ -1,0 +1,30 @@
+{% extends "main.html" %}
+
+{% block title %}Register on SocialFeed{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="bg-light col-md-8 col-lg-5 rounded my-lg-5 text-center mx-auto small">
+        <header>
+            <p class="h3 text-center">{{ user.profile.firstname }} {{ user.profile.lastname }}</p>
+        </header>
+        <div id="profile_pic_div">
+            <img src="{{ user.profile.profile_picture.url }}" alt="" id="profile_pic">
+        </div>
+        {{ user.profile.city }}<br>
+        {{ user.profile.country }}<br>
+        {{ user.profile.date_of_birth }}<br>
+        {{ user.profile.gender }}<br>
+        {{ user.profile.motto }}<br>
+        {{ user.profile.bio }}<br>
+
+    </div>
+
+    <div class="bg-light col-md-8 col-lg-6 rounded my-lg-5 text-center mx-auto small">
+        <h1>POSTS:</h1>
+    </div>
+</div>
+
+
+{% endblock %}
