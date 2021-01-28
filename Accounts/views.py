@@ -7,21 +7,36 @@ from django.contrib.auth import authenticate, login
 from .decorators import unathenticated_user
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from Posts.models import Post
+from Posts.forms import PostForm
 
 
 @login_required
 def dashboard(request):
-    return render(request, 'Accounts/dashboard.html')
+    posts = Post.objects.all()
+    post_form = PostForm
+    if request.method == 'POST':
+        post_form = PostForm(request.POST)
+        if post_form.is_valid():
+            new_post = post_form.save(commit=False)
+            new_post.user = request.user
+            new_post.save()
+        return redirect('/')
+    return render(request, 'Accounts/dashboard.html', {'posts':posts,
+                                                       'post_form':post_form})
 
 
 @login_required
 def profile_view(request, username):
+    posts = Post.objects.filter(user__username=username)
     user = get_object_or_404(User,
                             username=username,
                             is_active=True)
     return render(request, 'Accounts/view_profile.html', 
-                {'user':user})
-
+                {'user':user,
+                 'posts':posts})
+    
+    
 
 @unathenticated_user
 def register(request):
@@ -53,7 +68,6 @@ def edit_profile(request):
                                        files=request.FILES)
         if profile_form.is_valid():
             profile_form.save()
-            print('updated')
     else:
         profile_form = ProfileEditForm(instance=request.user.profile)
     return render(request, "Accounts/edit_profile.html", {'profile_form':profile_form})

@@ -4,5 +4,44 @@
 
 
 {% block content %}
-    <p>Tutaj będzie San Francisco</p>
+    <div class="text-center my-3">
+        <h3>Hi, {{ request.user }}</h3>
+    </div>
+
+    <div class='bg-light py-2'>
+        <div class="text-center">
+            <form action="" method="POST">
+                {{ post_form.post_text }}
+                {% csrf_token %}
+                <input type="submit" value="Post">
+            </form>
+        </div>
+    {% for post in posts %}
+        <div class="col-md-10 text-left bg-white rounded my-3 py-1 mx-auto">
+            <div class='col-md-1'>
+                <a class="text-decoration-none" href="{% url 'Accounts:profile_view' username=post.user %}">
+                    <h4>{{ post.user }}</h4>
+                </a>
+            </div>
+            {{ post.post_text }}<br>
+            <hr>
+            <div class='small'>
+                <form action="{% url 'Posts:like_post' post.id %}" method='POST'>
+                    {% csrf_token %}
+                    {% if request.user not in post.users_like.all %}
+                    <button type='submit' name='post_id' value={{post.id}} class="btn btn-primary btn-sm">Like</button>
+                    {% else %}
+                    <button type='submit' name='post_id' value={{post.id}} class="btn btn-primary btn-sm">Unike</button>
+                    {% endif %}
+                </form>
+                    Total likes: {{ post.total_likes }}
+                <a href="{% url 'Posts:post_view' pk=post.id username=post.user slug=post.slug %}" class="text-right">View post</a>
+                {% if request.user == post.user %}
+                    <a href="{% url 'Posts:delete_post' pk=post.id %}">remove</a> 
+                    <a href="{% url 'Posts:edit_post' pk=post.id %}">edit</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
 {% endblock %}

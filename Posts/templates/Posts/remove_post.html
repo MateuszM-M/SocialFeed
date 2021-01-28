@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+
+{% block title %}SocialFeed{% endblock %}
+
+{% block content %}
+
+<div class="col-md-10 text-left bg-white rounded my-3 py-1 mx-auto">
+    <h4>{{ post.user}}</h4>
+
+    <div class="text-center">
+        <p>Are you sure you want to delete "{{post}}"?</p>
+
+        <form action="{% url 'Posts:delete_post' post.id %}" method="POST">
+
+            {% csrf_token%}
+            <a href="{% url 'Accounts:dashboard' %}">Cancel</a>
+
+            <input type="submit" name="Confirm" value='DELETE'>
+        </form>
+    </div>
+
+
+</div>
+
+{% endblock %}

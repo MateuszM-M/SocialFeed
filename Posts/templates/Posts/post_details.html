@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block title %}SocialFeed{% endblock %}
+
+
+{% block content %}
+
+
+
+
+<div class="col-md-10 text-left bg-white rounded my-3 py-1 mx-auto">
+    <h4>{{ post.user}}</h4>
+    {{ post.post_text }}<br>
+    <hr>
+    <div class='small'>
+        <div class="btn btn-primary btn-sm">like
+        </div> 
+        Total likes:{{ post.total_likes }}
+    </div>
+</div>
+
+
+{% endblock %}

@@ -22,7 +22,19 @@
     </div>
 
     <div class="bg-light col-md-8 col-lg-6 rounded my-lg-5 text-center mx-auto small">
-        <h1>POSTS:</h1>
+        <h3>POSTS:</h3>
+        {% for post in posts %}
+            <div class="col-md-12 text-left bg-white rounded my-3 py-1">
+                {{ post.post_text }}<br>
+                <div class='small'>
+                    <div class="btn btn-primary btn-sm">like
+                    </div> 
+                    Total likes:{{ post.total_likes }}
+                </div>
+                Comment form
+            </div>
+        {% endfor %}
+
     </div>
 </div>
 
