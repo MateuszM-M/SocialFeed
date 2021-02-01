@@ -18,7 +18,26 @@
         {{ user.profile.gender }}<br>
         {{ user.profile.motto }}<br>
         {{ user.profile.bio }}<br>
-
+        <hr>
+        {% if user != request.user %}
+            <a href="">Invite</a><br>
+        {% endif %}
+        {% if user == request.user %}
+            {% for friend in friends %}
+                {% if friend.receiver == request.user and friend.sender != request.user and friend.status == 'send' %}
+                    {{ friend.sender}} invited you to friends <a href="">Accept</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <h4>Friends:</h4>
+        {% for friend in friends %}
+            {% if friend.sender != user and friend.status == 'accepted' %}
+                {{friend.sender}}
+            {% endif %}
+            {% if friend.receiver != user and friend.status == 'accepted' %}
+                {{friend.receiver}}
+            {% endif %}
+        {% endfor %}
     </div>
 
     <div class="bg-light col-md-8 col-lg-6 rounded my-lg-5 text-center mx-auto small">

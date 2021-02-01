@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .forms import *
-from .models import Profile
+from .models import Profile, Contact
 from django.contrib.auth import authenticate, login
 from .decorators import unathenticated_user
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from Posts.models import Post
 from Posts.forms import PostForm
+from django.db.models import Q
 
 
 @login_required
@@ -32,10 +33,12 @@ def profile_view(request, username):
     user = get_object_or_404(User,
                             username=username,
                             is_active=True)
+    friends = Contact.objects.filter(
+        Q(sender=user) | Q(receiver=user))
     return render(request, 'Accounts/view_profile.html', 
-                {'user':user,
-                 'posts':posts})
-    
+                {'user': user,
+                 'posts': posts,
+                 'friends': friends})
     
 
 @unathenticated_user
@@ -57,7 +60,7 @@ def register(request):
     else:
         user_form = UserRegistrationForm()
     return render(request, 'Accounts/register.html',
-                  {'user_form':user_form})
+                  {'user_form': user_form})
     
     
 @login_required
@@ -71,3 +74,6 @@ def edit_profile(request):
     else:
         profile_form = ProfileEditForm(instance=request.user.profile)
     return render(request, "Accounts/edit_profile.html", {'profile_form':profile_form})
+
+
+

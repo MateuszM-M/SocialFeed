@@ -44,5 +44,7 @@ urlpatterns=[
     
     path('register/', views.register, name='register'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
-    path('u/<username>', views.profile_view, name='profile_view')
+    path('u/<username>', views.profile_view, name='profile_view'),
+
+    #path('add/<pk>', views.add_friend, name='add_friend')
 ]
