@@ -53,4 +53,3 @@ class ProfileEditForm(forms.ModelForm):
             'date_of_birth': forms.SelectDateWidget(years=range(1900, datetime.now().year + 1)),
         }
 
-

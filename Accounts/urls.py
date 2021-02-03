@@ -47,5 +47,6 @@ urlpatterns=[
     path('u/<username>', views.profile_view, name='profile_view'),
 
     path('invite/<username>', views.invite, name='invite'),
-    path('accept/', views.accept, name='accept')
+    path('accept/', views.accept, name='accept'),
+    path('search/', views.profile_search, name='search')
 ]

@@ -11,7 +11,10 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            Search
+            <form action="{% url 'Accounts:search' %}" method="GET">
+                <input type="search" placeholder="Search" name="search">
+                <button class="btn btn-sm btn-outline-light" type="submit">Search</button>
+            </form>
             <ul class="navbar-nav mx-auto">
                 <li class="small nav-item"><a href="{% url 'Accounts:dashboard' %}" class="nav-link text-white btn">Home</a></li>
             </ul>

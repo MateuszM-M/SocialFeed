@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from Posts.models import Post
 from Posts.forms import PostForm
 from django.db.models import Q
+from django.contrib.postgres.search import SearchVector
+from functools import reduce
 
 
 @login_required
@@ -23,27 +25,27 @@ def dashboard(request):
             new_post.user = request.user
             new_post.save()
         return redirect('/')
-    return render(request, 'Accounts/dashboard.html', {'posts':posts,
-                                                       'post_form':post_form})
+    return render(request, 'Accounts/dashboard.html', {'posts': posts,
+                                                       'post_form': post_form})
 
 
 @login_required
 def profile_view(request, username):
     posts = Post.objects.filter(user__username=username)
     user = get_object_or_404(User,
-                            username=username,
-                            is_active=True)
+                             username=username,
+                             is_active=True)
     my_invites = Contact.objects.invitations_received(request.user.profile)
     invited = Contact.objects.filter(sender=request.user.profile, receiver=user.profile)
     contacts = []
     for i in invited:
         contacts.append(request.user.profile)
     return render(request, 'Accounts/view_profile.html',
-                {'user': user,
-                 'posts': posts,
-                 'contacts': contacts,
-                 'my_invites': my_invites})
-    
+                  {'user': user,
+                   'posts': posts,
+                   'contacts': contacts,
+                   'my_invites': my_invites})
+
 
 @unathenticated_user
 def register(request):
@@ -65,8 +67,8 @@ def register(request):
         user_form = UserRegistrationForm()
     return render(request, 'Accounts/register.html',
                   {'user_form': user_form})
-    
-    
+
+
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
@@ -77,7 +79,7 @@ def edit_profile(request):
             profile_form.save()
     else:
         profile_form = ProfileEditForm(instance=request.user.profile)
-    return render(request, "Accounts/edit_profile.html", {'profile_form':profile_form})
+    return render(request, "Accounts/edit_profile.html", {'profile_form': profile_form})
 
 
 @login_required
@@ -105,3 +107,15 @@ def accept(request):
         contact.delete()
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('Accounts:dashboard')
+
+
+@login_required()
+def profile_search(request):
+    query = request.GET.get('search')
+    if query:
+        results = User.objects.annotate(
+            search=SearchVector('username'),
+        ).filter(search=query)
+        return render(request, 'Accounts/search.html',
+                      {'query': query,
+                       'results': results})
