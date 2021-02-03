@@ -36,4 +36,4 @@ class Post(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.post_text[:20])
-        super(Post,self).save(*args, **kwargs)
+        super(Post, self).save(*args, **kwargs)

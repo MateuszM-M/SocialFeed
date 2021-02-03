@@ -33,12 +33,16 @@ def profile_view(request, username):
     user = get_object_or_404(User,
                             username=username,
                             is_active=True)
-    friends = Contact.objects.filter(
-        Q(sender=user) | Q(receiver=user))
-    return render(request, 'Accounts/view_profile.html', 
+    my_invites = Contact.objects.invitations_received(request.user.profile)
+    invited = Contact.objects.filter(sender=request.user.profile, receiver=user.profile)
+    contacts = []
+    for i in invited:
+        contacts.append(request.user.profile)
+    return render(request, 'Accounts/view_profile.html',
                 {'user': user,
                  'posts': posts,
-                 'friends': friends})
+                 'contacts': contacts,
+                 'my_invites': my_invites})
     
 
 @unathenticated_user
@@ -76,4 +80,28 @@ def edit_profile(request):
     return render(request, "Accounts/edit_profile.html", {'profile_form':profile_form})
 
 
+@login_required
+def invite(request, username):
+    if request.method == 'POST':
+        sender = Profile.objects.get(user=request.user)
+        user = get_object_or_404(User,
+                                 username=username,
+                                 is_active=True)
+        receiver = Profile.objects.get(user=user)
+        contact = Contact.objects.create(sender=sender, receiver=receiver)
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('Accounts:dashboard')
 
+
+@login_required
+def accept(request):
+    if request.method == 'POST':
+        user = request.POST.get('username')
+        sender = Profile.objects.get(user__username=user)
+        receiver = Profile.objects.get(user=request.user)
+        contact = get_object_or_404(Contact, sender=sender, receiver=receiver)
+        contact.status = 'accepted'
+        contact.save()
+        contact.delete()
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('Accounts:dashboard')

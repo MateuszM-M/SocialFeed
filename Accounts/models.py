@@ -34,6 +34,12 @@ class Profile(models.Model):
         return self.obcjects.friends.all().count()
 
 
+class ContactManager(models.Manager):
+    def invitations_received(self, receiver):
+        qs = Contact.objects.filter(receiver=receiver, status='send')
+        return qs
+
+
 class Contact(models.Model):
     STATUS_CHOICES = (
         ('send', 'send'),
@@ -49,6 +55,7 @@ class Contact(models.Model):
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default="send")
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    objects = ContactManager()
 
     def __str__(self):
         return f"{self.sender}-{self.receiver}-{self.status}"

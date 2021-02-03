@@ -21,7 +21,7 @@
 						<a href="#" class="nav-link nav-item dropdown-toggle small text-white mr-2" data-toggle="dropdown" role="button" aria-expanded="false" id="submenu" aria-haspopup="true">Profile</a>
 
 						<div class="dropdown-menu" aria-labelledby="submenu">
-							<a href="{% url 'Accounts:profile_view' username=user %}" class="dropdown-item">View profile</a>
+							<a href="{% url 'Accounts:profile_view' request.user %}" class="dropdown-item">View profile</a>
 							<a href="{% url 'Accounts:edit_profile' %}" class="dropdown-item">Edit profile</a>
 							<a href="{% url 'Accounts:password_change' %}" class="dropdown-item">Change password</a>
 							<div class="dropdown-divider"></div>

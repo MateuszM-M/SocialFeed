@@ -19,24 +19,29 @@
         {{ user.profile.motto }}<br>
         {{ user.profile.bio }}<br>
         <hr>
-        {% if user != request.user %}
-            <a href="">Invite</a><br>
-        {% endif %}
+            {% if user != request.user and request.user.profile in contacts %}
+                Invitation sent
+            {% elif user != request.user and user not in request.user.profile.friends.all %}
+                <form action="{% url 'Accounts:invite' user.username %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-sm">Invite</button>
+                </form>
+            {% elif user != request.user and user in request.user.profile.friends.all %}
+                You and {{ user.username }} are friends
+            {% endif %}
         {% if user == request.user %}
-            {% for friend in friends %}
-                {% if friend.receiver == request.user and friend.sender != request.user and friend.status == 'send' %}
-                    {{ friend.sender}} invited you to friends <a href="">Accept</a>
-                {% endif %}
+            {% for invite in my_invites %}
+                {{ invite.sender }} invited you to friends
+                <form action="{% url 'Accounts:accept' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="username" value="{{invite.sender}}">
+                    <button type="submit" class="btn btn-primary btn-sm">Accept</button>
+                </form>
             {% endfor %}
         {% endif %}
         <h4>Friends:</h4>
-        {% for friend in friends %}
-            {% if friend.sender != user and friend.status == 'accepted' %}
-                {{friend.sender}}
-            {% endif %}
-            {% if friend.receiver != user and friend.status == 'accepted' %}
-                {{friend.receiver}}
-            {% endif %}
+        {% for friend in user.profile.friends.all %}
+            {{ friend }}
         {% endfor %}
     </div>
 
