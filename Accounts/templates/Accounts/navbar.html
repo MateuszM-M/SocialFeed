@@ -11,15 +11,15 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <form action="{% url 'Accounts:search' %}" method="GET">
-                <input type="search" placeholder="Search" name="search">
+            <form action="{% url 'Accounts:search' %}" method="GET" class="d-flex">
+                <input type="search" placeholder="Search" name="search" class="form-control col-m-10 mr-1">
                 <button class="btn btn-sm btn-outline-light" type="submit">Search</button>
             </form>
             <ul class="navbar-nav mx-auto">
                 <li class="small nav-item"><a href="{% url 'Accounts:dashboard' %}" class="nav-link text-white btn">Home</a></li>
+                <li class="small nav-item"><a href="{% url 'Accounts:users' %}" class="nav-link text-white btn">People</a></li>
             </ul>
             <ul class="navbar-nav ">
-                <!--<li class="nav-item text-secondary small nav-link">Hi, {{ request.user }}</li> -->
                 <li class="nav-item dropdown">
 						<a href="#" class="nav-link nav-item dropdown-toggle small text-white mr-2" data-toggle="dropdown" role="button" aria-expanded="false" id="submenu" aria-haspopup="true">Profile</a>
 

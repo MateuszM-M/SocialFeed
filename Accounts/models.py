@@ -12,7 +12,7 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=50, blank=True, null=True)
-    lastname = models.CharField(max_length=50, )
+    lastname = models.CharField(max_length=50)
     gender = models.CharField(max_length=22, choices=GENDER, default='X')
     date_of_birth = models.DateField(blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True)
@@ -59,4 +59,3 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.sender}-{self.receiver}-{self.status}"
-

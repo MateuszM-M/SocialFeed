@@ -1,6 +1,6 @@
 {% extends 'main.html' %}
 
-{% block title %}SocialFeed{% endblock %}
+{% block title %}Edit post{% endblock %}
 
 {% block content %}
 
@@ -11,7 +11,7 @@
         <form action="" method="POST">
             {{ post_edit_form.as_p }}
             {% csrf_token %}
-            <input type="submit" value="Edit">
+            <input type="submit" value="Save">
         </form>
     </div>
 

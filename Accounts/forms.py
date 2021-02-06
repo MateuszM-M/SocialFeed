@@ -1,8 +1,9 @@
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from .models import Profile, Contact
+from .models import Profile
 from django import forms
 from datetime import datetime
+
 
 
 class UserLoginForm(AuthenticationForm):
@@ -52,4 +53,3 @@ class ProfileEditForm(forms.ModelForm):
             'user': forms.HiddenInput(),
             'date_of_birth': forms.SelectDateWidget(years=range(1900, datetime.now().year + 1)),
         }
-

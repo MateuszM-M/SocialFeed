@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from .models import Profile, Contact
@@ -9,14 +8,13 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from Posts.models import Post
 from Posts.forms import PostForm
-from django.db.models import Q
 from django.contrib.postgres.search import SearchVector
-from functools import reduce
 
 
 @login_required
 def dashboard(request):
-    posts = Post.objects.all()
+    friends = request.user.profile.friends.all()
+    posts = Post.objects.filter(user__in=friends)
     post_form = PostForm
     if request.method == 'POST':
         post_form = PostForm(request.POST)
@@ -119,3 +117,10 @@ def profile_search(request):
         return render(request, 'Accounts/search.html',
                       {'query': query,
                        'results': results})
+
+
+@login_required()
+def recommended_users(request):
+    people = Profile.objects.all().order_by('date_created')[:10:-1]
+    return render(request, 'Accounts/people.html',
+                  {'people': people})
