@@ -24,7 +24,6 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 SECRET_KEY = os.environ.get('SOCIALFEED_SECRET_KEY')
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
