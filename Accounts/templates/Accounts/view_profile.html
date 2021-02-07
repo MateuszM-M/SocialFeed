@@ -22,7 +22,30 @@
     </div>
 
     <div class="bg-light col-md-8 col-lg-6 rounded my-lg-5 text-center mx-auto small">
-        <h1>POSTS:</h1>
+        <h3>POSTS:</h3>
+        {% for post in posts %}
+            <div class="col-md-10 text-left bg-white rounded my-3 py-1 mx-auto">
+                {{ post.post_text }}<br>
+                <hr>
+                <div class='small'>
+                    <form action="{% url 'Posts:like_post' post.id %}" method='POST'>
+                        {% csrf_token %}
+                        {% if request.user not in post.users_like.all %}
+                        <button type='submit' name='post_id' value={{post.id}} class="btn btn-primary btn-sm">Like</button>
+                        {% else %}
+                        <button type='submit' name='post_id' value={{post.id}} class="btn btn-primary btn-sm">Unike</button>
+                        {% endif %}
+                    </form>
+                        Total likes: {{ post.total_likes }}
+                    <a href="{% url 'Posts:post_view' pk=post.id username=post.user slug=post.slug %}" class="text-right">View post</a>
+                    {% if request.user == post.user %}
+                        <a href="{% url 'Posts:delete_post' pk=post.id %}">remove</a>
+                        <a href="{% url 'Posts:edit_post' pk=post.id %}">edit</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
     </div>
 </div>
 
