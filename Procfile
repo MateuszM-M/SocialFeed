@@ -1,1 +1,1 @@
-web: gunicorn MMblog.wsgi --log-file -
+web: gunicorn SocialFeed.wsgi --log-file -

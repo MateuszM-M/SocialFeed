@@ -4,4 +4,7 @@ from .models import *
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['firstname', 'lastname', 'gender', 'date_of_birth', 'country', 'city',]
+    list_display = ['firstname', 'lastname', 'gender', 'date_of_birth', 'country', 'city', ]
+
+
+admin.site.register(Contact)

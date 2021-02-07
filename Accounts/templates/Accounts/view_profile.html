@@ -1,13 +1,17 @@
 {% extends "main.html" %}
 
-{% block title %}Register on SocialFeed{% endblock %}
+{% block title %} {{user}} {% endblock %}
 
 {% block content %}
 
 <div class="row">
-    <div class="bg-light col-md-8 col-lg-5 rounded my-lg-5 text-center mx-auto small">
+    <div class="bg-light col-md-8 col-lg-4 rounded my-lg-5 text-center mx-auto small">
         <header>
-            <p class="h3 text-center">{{ user.profile.firstname }} {{ user.profile.lastname }}</p>
+            {% if user.profile.firstname or user.profile.lastname %}
+                <p class="h3 text-center">{{ user.profile.firstname }} {{ user.profile.lastname }}</p>
+            {% else %}
+                <p class="h3 text-center">{{ user.username }}</p>
+            {% endif %}
         </header>
         <div id="profile_pic_div">
             <img src="{{ user.profile.profile_picture.url }}" alt="" id="profile_pic">
@@ -18,29 +22,62 @@
         {{ user.profile.gender }}<br>
         {{ user.profile.motto }}<br>
         {{ user.profile.bio }}<br>
-
+        <hr>
+            {% if user != request.user and request.user.profile in contacts %}
+                Invitation sent
+            {% elif user != request.user and user not in request.user.profile.friends.all %}
+                <form action="{% url 'Accounts:invite' user.username %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-sm">Invite</button>
+                </form>
+            {% elif user != request.user and user in request.user.profile.friends.all %}
+                You and {{ user.username }} are friends
+            {% endif %}
+        {% if user == request.user %}
+            {% for invite in my_invites %}
+                {{ invite.sender }} invited you to friends
+                <form action="{% url 'Accounts:accept' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="username" value="{{invite.sender}}">
+                    <button type="submit" class="btn btn-primary btn-sm">Accept</button>
+                </form>
+            {% endfor %}
+        {% endif %}
+        <h4>Friends:</h4>
+        {% for friend in user.profile.friends.all %}
+            <div class="d-inline-flex mb-2">
+                <a class="text-decoration-none" href="{% url 'Accounts:profile_view' friend %}">{{ friend }}<br>
+                    <img src="{{ friend.profile.profile_picture.url }}" alt="" id="profile_pic" width="100"></a>
+            </div>
+        {% endfor %}
     </div>
 
-    <div class="bg-light col-md-8 col-lg-6 rounded my-lg-5 text-center mx-auto small">
+    <div class="bg-light col-md-8 col-lg-7 rounded my-lg-5 text-center mx-auto small">
         <h3>POSTS:</h3>
+
         {% for post in posts %}
-            <div class="col-md-10 text-left bg-white rounded my-3 py-1 mx-auto">
+            <div class="col-md-11 text-left bg-white rounded my-3 py-1 mx-auto">
                 {{ post.post_text }}<br>
                 <hr>
-                <div class='small'>
+
+                 <div class='small d-flex'>
                     <form action="{% url 'Posts:like_post' post.id %}" method='POST'>
                         {% csrf_token %}
                         {% if request.user not in post.users_like.all %}
-                        <button type='submit' name='post_id' value={{post.id}} class="btn btn-primary btn-sm">Like</button>
+                        <button type='submit' name='post_id' value={{post.id}} class="btn btn-primary btn-sm mr-2">Like</button>
                         {% else %}
-                        <button type='submit' name='post_id' value={{post.id}} class="btn btn-primary btn-sm">Unike</button>
+                        <button type='submit' name='post_id' value={{post.id}} class="btn btn-primary btn-sm mr-2">Unlike</button>
                         {% endif %}
                     </form>
-                        Total likes: {{ post.total_likes }}
-                    <a href="{% url 'Posts:post_view' pk=post.id username=post.user slug=post.slug %}" class="text-right">View post</a>
+                        <p class="mr-2">Total likes: {{ post.total_likes }}</p>
+                    <a href="{% url 'Posts:post_view' post.user post.id post.slug %}" class="text-right mr-2">View post</a>
                     {% if request.user == post.user %}
-                        <a href="{% url 'Posts:delete_post' pk=post.id %}">remove</a>
-                        <a href="{% url 'Posts:edit_post' pk=post.id %}">edit</a>
+                        <a href="{% url 'Posts:delete_post' pk=post.id %}" class="mr-2">remove</a>
+                        <a href="{% url 'Posts:edit_post' pk=post.id %}" class="mr-2">edit</a>
+                    {% endif %}
+                    <p class="mr-2">Published: {{post.created_date}}</p>
+                    {% if post.updated_date %}
+                        <p class="mr-2">Edited: {{post.updated_date}}</p>
                     {% endif %}
                 </div>
             </div>

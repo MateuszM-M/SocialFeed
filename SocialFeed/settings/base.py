@@ -28,13 +28,14 @@ SECRET_KEY = os.environ.get('SOCIALFEED_SECRET_KEY')
 # Application definition
 
 INSTALLED_APPS = [
-    'Accounts',
+    'Accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'storages',
     'Posts'
 ]

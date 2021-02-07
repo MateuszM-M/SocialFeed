@@ -1,19 +1,20 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .forms import *
-from .models import Profile
+from .models import Profile, Contact
 from django.contrib.auth import authenticate, login
 from .decorators import unathenticated_user
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from Posts.models import Post
 from Posts.forms import PostForm
+from django.contrib.postgres.search import SearchVector
 
 
 @login_required
 def dashboard(request):
-    posts = Post.objects.all()
+    friends = request.user.profile.friends.all()
+    posts = Post.objects.filter(user__in=friends)
     post_form = PostForm
     if request.method == 'POST':
         post_form = PostForm(request.POST)
@@ -22,21 +23,27 @@ def dashboard(request):
             new_post.user = request.user
             new_post.save()
         return redirect('/')
-    return render(request, 'Accounts/dashboard.html', {'posts':posts,
-                                                       'post_form':post_form})
+    return render(request, 'Accounts/dashboard.html', {'posts': posts,
+                                                       'post_form': post_form})
 
 
 @login_required
 def profile_view(request, username):
     posts = Post.objects.filter(user__username=username)
     user = get_object_or_404(User,
-                            username=username,
-                            is_active=True)
-    return render(request, 'Accounts/view_profile.html', 
-                {'user':user,
-                 'posts':posts})
-    
-    
+                             username=username,
+                             is_active=True)
+    my_invites = Contact.objects.invitations_received(request.user.profile)
+    invited = Contact.objects.filter(sender=request.user.profile, receiver=user.profile)
+    contacts = []
+    for i in invited:
+        contacts.append(request.user.profile)
+    return render(request, 'Accounts/view_profile.html',
+                  {'user': user,
+                   'posts': posts,
+                   'contacts': contacts,
+                   'my_invites': my_invites})
+
 
 @unathenticated_user
 def register(request):
@@ -57,9 +64,9 @@ def register(request):
     else:
         user_form = UserRegistrationForm()
     return render(request, 'Accounts/register.html',
-                  {'user_form':user_form})
-    
-    
+                  {'user_form': user_form})
+
+
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
@@ -70,4 +77,50 @@ def edit_profile(request):
             profile_form.save()
     else:
         profile_form = ProfileEditForm(instance=request.user.profile)
-    return render(request, "Accounts/edit_profile.html", {'profile_form':profile_form})
+    return render(request, "Accounts/edit_profile.html", {'profile_form': profile_form})
+
+
+@login_required
+def invite(request, username):
+    if request.method == 'POST':
+        sender = Profile.objects.get(user=request.user)
+        user = get_object_or_404(User,
+                                 username=username,
+                                 is_active=True)
+        receiver = Profile.objects.get(user=user)
+        contact = Contact.objects.create(sender=sender, receiver=receiver)
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('Accounts:dashboard')
+
+
+@login_required
+def accept(request):
+    if request.method == 'POST':
+        user = request.POST.get('username')
+        sender = Profile.objects.get(user__username=user)
+        receiver = Profile.objects.get(user=request.user)
+        contact = get_object_or_404(Contact, sender=sender, receiver=receiver)
+        contact.status = 'accepted'
+        contact.save()
+        contact.delete()
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('Accounts:dashboard')
+
+
+@login_required()
+def profile_search(request):
+    query = request.GET.get('search')
+    if query:
+        results = User.objects.annotate(
+            search=SearchVector('username'),
+        ).filter(search=query)
+        return render(request, 'Accounts/search.html',
+                      {'query': query,
+                       'results': results})
+
+
+@login_required()
+def recommended_users(request):
+    people = Profile.objects.all().order_by('date_created')[:10:-1]
+    return render(request, 'Accounts/people.html',
+                  {'people': people})
