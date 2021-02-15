@@ -5,6 +5,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["hello-social-feed.herokuapp.com", "127.0.0.1", "herokuapp.com"]
 
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",

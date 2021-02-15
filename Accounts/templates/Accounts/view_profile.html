@@ -31,25 +31,36 @@
                     <button type="submit" class="btn btn-primary btn-sm">Invite</button>
                 </form>
             {% elif user != request.user and user in request.user.profile.friends.all %}
-                You and {{ user.username }} are friends
+                You and {{ user.username }} are friends <a href="{% url "Accounts:delete_friend" user.username %}" class="ml-3 text-decoration-none">delete</a>
             {% endif %}
-        {% if user == request.user %}
-            {% for invite in my_invites %}
-                {{ invite.sender }} invited you to friends
-                <form action="{% url 'Accounts:accept' %}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="username" value="{{invite.sender}}">
-                    <button type="submit" class="btn btn-primary btn-sm">Accept</button>
-                </form>
-            {% endfor %}
-        {% endif %}
+        <div class="d-flex text-center justify-content-center">
+            {% if user == request.user %}
+                {% for invite in my_invites %}
+                    <p class="mr-1"><a href="{% url "Accounts:profile_view" invite.sender %}">{{ invite.sender }}</a> invited you to friends</p>
+                    <form action="{% url 'Accounts:accept' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="username" value="{{invite.sender}}">
+                        <button type="submit" class="btn btn-primary btn-sm mr-1">Accept</button>
+                    </form>
+                    <form action="{% url 'Accounts:reject' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="username" value="{{invite.sender}}">
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                {% endfor %}
+            {% endif %}
+        </div>
         <h4>Friends:</h4>
-        {% for friend in user.profile.friends.all %}
+        {% for friend in friends %}
             <div class="d-inline-flex mb-2">
                 <a class="text-decoration-none" href="{% url 'Accounts:profile_view' friend %}">{{ friend }}<br>
                     <img src="{{ friend.profile.profile_picture.url }}" alt="" id="profile_pic" width="100"></a>
             </div>
         {% endfor %}
+
+        {% include "Accounts/pagination.html" with page_obj=friends %}
+        <hr>
+
     </div>
 
     <div class="bg-light col-md-8 col-lg-7 rounded my-lg-5 text-center mx-auto small">
@@ -82,6 +93,8 @@
                 </div>
             </div>
         {% endfor %}
+
+        {% include "Accounts/pagination.html" with page_obj=posts %}
 
     </div>
 </div>

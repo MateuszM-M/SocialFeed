@@ -17,8 +17,10 @@
                     <img src="{{ person.profile_picture.url }}" alt="" id="profile_pic" width="100"></a>
             </div>
         {% endfor %}
+        {% include "Accounts/pagination.html" with page_obj=people %}
     </div>
 </div>
+
 
 
 {% endblock %}

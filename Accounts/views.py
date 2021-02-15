@@ -9,12 +9,21 @@ from django.contrib.auth.models import User
 from Posts.models import Post
 from Posts.forms import PostForm
 from django.contrib.postgres.search import SearchVector
+from django.core.paginator import Paginator
 
 
 @login_required
 def dashboard(request):
     friends = request.user.profile.friends.all()
+    paginator_fr = Paginator(friends, 10)
+    page_number = request.GET.get('page')
+    friends = paginator_fr.get_page(page_number)
+
     posts = Post.objects.filter(user__in=friends)
+    paginator_p = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    posts = paginator_p.get_page(page_number)
+
     post_form = PostForm
     if request.method == 'POST':
         post_form = PostForm(request.POST)
@@ -29,18 +38,30 @@ def dashboard(request):
 
 @login_required
 def profile_view(request, username):
+    user = Profile.objects.get(user__username=username)
+    friends = user.friends.all()
+    paginator_fr = Paginator(friends, 10)
+    page_number = request.GET.get('page')
+    friends = paginator_fr.get_page(page_number)
+
     posts = Post.objects.filter(user__username=username)
+    paginator_p = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    posts = paginator_p.get_page(page_number)
+
     user = get_object_or_404(User,
                              username=username,
                              is_active=True)
     my_invites = Contact.objects.invitations_received(request.user.profile)
-    invited = Contact.objects.filter(sender=request.user.profile, receiver=user.profile)
+    invited = Contact.objects.filter(sender=request.user.profile, 
+                                     receiver=user.profile)
     contacts = []
     for i in invited:
         contacts.append(request.user.profile)
     return render(request, 'Accounts/view_profile.html',
                   {'user': user,
                    'posts': posts,
+                   'friends': friends,
                    'contacts': contacts,
                    'my_invites': my_invites})
 
@@ -77,7 +98,8 @@ def edit_profile(request):
             profile_form.save()
     else:
         profile_form = ProfileEditForm(instance=request.user.profile)
-    return render(request, "Accounts/edit_profile.html", {'profile_form': profile_form})
+    return render(request, "Accounts/edit_profile.html", 
+                  {'profile_form': profile_form})
 
 
 @login_required
@@ -107,6 +129,31 @@ def accept(request):
     return redirect('Accounts:dashboard')
 
 
+@login_required
+def reject(request):
+    if request.method == 'POST':
+        user = request.POST.get('username')
+        sender = Profile.objects.get(user__username=user)
+        receiver = Profile.objects.get(user=request.user)
+        contact = get_object_or_404(Contact, sender=sender, receiver=receiver)
+        contact.delete()
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('Accounts:dashboard')
+
+
+@login_required
+def delete_friend(request, username):
+    deleter = Profile.objects.get(user=request.user)
+    deleted_friend = Profile.objects.get(user__username=username)
+    if request.method == 'POST':
+        deleter.friends.remove(deleted_friend.user)
+        deleted_friend.friends.remove(deleter.user)
+        return redirect('Accounts:dashboard')
+    return render(request, 'Accounts/delete_friend.html', 
+                  {'deleted_friend': deleted_friend,
+                   'deleter': deleter})
+
+
 @login_required()
 def profile_search(request):
     query = request.GET.get('search')
@@ -122,5 +169,8 @@ def profile_search(request):
 @login_required()
 def recommended_users(request):
     people = Profile.objects.all().order_by('date_created')[:10:-1]
+    paginator = Paginator(people, 10)
+    page_number = request.GET.get('page')
+    people = paginator.get_page(page_number)
     return render(request, 'Accounts/people.html',
                   {'people': people})

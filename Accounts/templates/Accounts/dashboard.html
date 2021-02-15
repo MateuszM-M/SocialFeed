@@ -50,5 +50,7 @@
             </div>
         {% endfor %}
 
+        {% include "Accounts/pagination.html" with page_obj=posts %}
+
     </div>
 {% endblock %}
