@@ -48,7 +48,7 @@ urlpatterns = [
     path('accept/', views.accept, name='accept'),
     path('reject/', views.reject, name='reject'),
     path('delete/<username>', views.delete_friend, name='delete_friend'),
+    path('friends/<username>', views.users_friends, name='user_friends'),
     path('search/', views.profile_search, name='search'),
-
-    path('users/', views.recommended_users, name='users')
+    path('users/', views.recommended_users, name='users'),
 ]

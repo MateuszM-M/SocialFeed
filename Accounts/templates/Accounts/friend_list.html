@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+
+{% block title %}{{user}}'s friends{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6 my-5 py-lg-5">
+        <header>
+            <p class=" h3 text-center">{{user}}'s friends</p>
+        </header>
+    </div>
+    <div class="bg-white col-md-8 col-lg-5 rounded my-lg-5 text-center mx-auto small">
+        {% for friend in friends %}
+        <div class="d-inline-flex mb-2">
+                <a class="text-decoration-none" href="{% url 'Accounts:profile_view' friend %}">{{ friend }}<br>
+                    <img src="{{ friend.profile.profile_picture.url }}" alt="" id="profile_pic" width="100"></a>
+            </div>
+        {% endfor %}
+        {% include "Accounts/pagination.html" with page_obj=friends %}
+    </div>
+</div>
+
+
+
+{% endblock %}

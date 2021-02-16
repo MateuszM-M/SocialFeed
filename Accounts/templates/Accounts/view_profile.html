@@ -56,9 +56,8 @@
                 <a class="text-decoration-none" href="{% url 'Accounts:profile_view' friend %}">{{ friend }}<br>
                     <img src="{{ friend.profile.profile_picture.url }}" alt="" id="profile_pic" width="100"></a>
             </div>
-        {% endfor %}
-
-        {% include "Accounts/pagination.html" with page_obj=friends %}
+        {% endfor %}<br>
+        <a href="{% url "Accounts:user_friends" user.username %}">View all {% if request.user == user %} my {% else %} {{ user.username }}'s {% endif %} friends</a>
         <hr>
 
     </div>

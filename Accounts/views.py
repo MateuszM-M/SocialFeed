@@ -1,29 +1,25 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import *
-from .models import Profile, Contact
 from django.contrib.auth import authenticate, login
-from .decorators import unathenticated_user
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from Posts.models import Post
-from Posts.forms import PostForm
 from django.contrib.postgres.search import SearchVector
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
+from Posts.forms import PostForm
+from Posts.models import Post
+
+from .decorators import unathenticated_user
+from .forms import *
+from .models import Contact, Profile
 
 
 @login_required
 def dashboard(request):
     friends = request.user.profile.friends.all()
-    paginator_fr = Paginator(friends, 10)
-    page_number = request.GET.get('page')
-    friends = paginator_fr.get_page(page_number)
-
-    posts = Post.objects.filter(user__in=friends)
+    posts = Post.objects.filter(Q(user__in=friends) | Q(user=request.user))
     paginator_p = Paginator(posts, 10)
     page_number = request.GET.get('page')
     posts = paginator_p.get_page(page_number)
-
     post_form = PostForm
     if request.method == 'POST':
         post_form = PostForm(request.POST)
@@ -39,10 +35,7 @@ def dashboard(request):
 @login_required
 def profile_view(request, username):
     user = Profile.objects.get(user__username=username)
-    friends = user.friends.all()
-    paginator_fr = Paginator(friends, 10)
-    page_number = request.GET.get('page')
-    friends = paginator_fr.get_page(page_number)
+    friends = user.friends.all()[:6]
 
     posts = Post.objects.filter(user__username=username)
     paginator_p = Paginator(posts, 10)
@@ -64,6 +57,17 @@ def profile_view(request, username):
                    'friends': friends,
                    'contacts': contacts,
                    'my_invites': my_invites})
+
+
+@login_required()
+def users_friends(request, username):
+    user = Profile.objects.get(user__username=username)
+    friends = user.friends.all()
+    paginator = Paginator(friends, 16)
+    page_number = request.GET.get('page')
+    friends = paginator.get_page(page_number)
+    return render(request, 'Accounts/friend_list.html',
+                  {'friends': friends})
 
 
 @unathenticated_user
@@ -168,8 +172,10 @@ def profile_search(request):
 
 @login_required()
 def recommended_users(request):
-    people = Profile.objects.all().order_by('date_created')[:10:-1]
-    paginator = Paginator(people, 10)
+    people = Profile.objects.exclude(
+        user=request.user
+        ).order_by('date_created')[:10:-1]
+    paginator = Paginator(people, 8)
     page_number = request.GET.get('page')
     people = paginator.get_page(page_number)
     return render(request, 'Accounts/people.html',
