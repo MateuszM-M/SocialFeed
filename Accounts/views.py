@@ -48,11 +48,15 @@ def profile_view(request, username):
     my_invites = Contact.objects.invitations_received(request.user.profile)
     invited = Contact.objects.filter(sender=request.user.profile, 
                                      receiver=user.profile)
+
+    title = user
+
     contacts = []
     for i in invited:
         contacts.append(request.user.profile)
     return render(request, 'Accounts/view_profile.html',
                   {'user': user,
+                   'title': user,
                    'posts': posts,
                    'friends': friends,
                    'contacts': contacts,

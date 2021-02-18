@@ -13,9 +13,18 @@
 
     <div class="bg-white col-md-8 col-lg-5 rounded my-lg-5 text-center mx-auto small">
         <form action="" method="POST" class="mt-3" enctype="multipart/form-data">
-            {{ profile_form.as_p }}
+            <div class="mb-3">{{ profile_form.firstname.label }} {{ profile_form.firstname }}</div>
+            <div class="mb-3">{{ profile_form.lastname.label }} {{ profile_form.lastname }}</div>
+            <div class="mb-3">{{ profile_form.gender.label }} {{ profile_form.gender }}</div>
+            <div class="mb-3">{{ profile_form.date_of_birth.label }} {{ profile_form.date_of_birth }}</div>
+            <div class="mb-3">{{ profile_form.phone.label }} {{ profile_form.phone }}</div>
+            <div class="mb-3">{{ profile_form.city.label }} {{ profile_form.city }}</div>
+            <div class="mb-3">{{ profile_form.country.label }} {{ profile_form.country }}</div>
+            <div class="mb-3">{{ profile_form.profile_picture.label }} {{ profile_form.profile_picture }}</div>
+            <div class="mb-3">{{ profile_form.motto.label }} {{ profile_form.motto }}</div>
+            <div class="mb-3">{{ profile_form.bio.label }} {{ profile_form.bio }}</div>
             {% csrf_token %}
-            <p><input type="submit" value="Change" class="btn btn-primary px-5 form-control"></p>
+            <p><input type="submit" value="Save" class="btn btn-primary px-5 form-control"></p>
         </form>
     </div>
 </div>

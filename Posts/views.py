@@ -5,7 +5,6 @@ from django.shortcuts import get_object_or_404
 from .forms import PostForm
 from django.http import HttpResponseRedirect
 from datetime import datetime
-from django.utils.timezone import now
 
 
 @login_required
