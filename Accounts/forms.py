@@ -5,7 +5,6 @@ from django import forms
 from datetime import datetime
 
 
-
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(label=False, widget=forms.TextInput(
         attrs={'class': 'form-control',
@@ -48,8 +47,10 @@ class UserRegistrationForm(forms.ModelForm):
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = [
+            'firstname', 'lastname', 'gender', 'date_of_birth', 'phone', 
+            'city', 'country', 'profile_picture', 'motto', 'bio']
         widgets = {
-            'user': forms.HiddenInput(),
-            'date_of_birth': forms.SelectDateWidget(years=range(1900, datetime.now().year + 1)),
+            'date_of_birth': forms.SelectDateWidget(
+                years=range(1900, datetime.now().year + 1)),
         }
