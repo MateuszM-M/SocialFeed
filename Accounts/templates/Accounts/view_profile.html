@@ -6,6 +6,7 @@
 
 <div class="row">
     <div class="bg-light col-md-8 col-lg-4 rounded my-lg-5 text-center mx-auto small">
+        <!--username-->
         <header>
             {% if user.profile.firstname or user.profile.lastname %}
                 <p class="h3 text-center">{{ user.profile.firstname }} {{ user.profile.lastname }}</p>
@@ -13,9 +14,11 @@
                 <p class="h3 text-center">{{ user.username }}</p>
             {% endif %}
         </header>
+        <!--profile pic-->
         <div id="profile_pic_div">
             <img src="{{ user.profile.profile_picture.url }}" alt="" id="profile_pic">
         </div>
+        <!--profile data-->
         {{ user.profile.city }}<br>
         {{ user.profile.country }}<br>
         {{ user.profile.date_of_birth }}<br>
@@ -23,6 +26,7 @@
         {{ user.profile.motto }}<br>
         {{ user.profile.bio }}<br>
         <hr>
+            <!--invitations-->
             {% if user != request.user and request.user.profile in contacts %}
                 Invitation sent
             {% elif user != request.user and user not in request.user.profile.friends.all %}
@@ -33,23 +37,27 @@
             {% elif user != request.user and user in request.user.profile.friends.all %}
                 You and {{ user.username }} are friends <a href="{% url "Accounts:delete_friend" user.username %}" class="ml-3 text-decoration-none">delete</a>
             {% endif %}
-        <div class="d-flex text-center justify-content-center">
-            {% if user == request.user %}
-                {% for invite in my_invites %}
-                    <p class="mr-1"><a href="{% url "Accounts:profile_view" invite.sender %}">{{ invite.sender }}</a> invited you to friends</p>
-                    <form action="{% url 'Accounts:accept' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="username" value="{{invite.sender}}">
-                        <button type="submit" class="btn btn-primary btn-sm mr-1">Accept</button>
-                    </form>
-                    <form action="{% url 'Accounts:reject' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="username" value="{{invite.sender}}">
-                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                    </form>
-                {% endfor %}
-            {% endif %}
-        </div>
+
+            <div class="flex-column">
+                {% if user == request.user %}
+                    {% for invite in my_invites %}
+                    <div class="d-flex justify-content-center">
+                        <p class="mr-1"><a href="{% url "Accounts:profile_view" invite.sender %}">{{ invite.sender }}</a> invited you to friends</p>
+                        <form action="{% url 'Accounts:accept' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="username" value="{{invite.sender}}">
+                            <button type="submit" class="btn btn-primary btn-sm">Accept</button>
+                        </form>
+                        <form action="{% url 'Accounts:reject' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="username" value="{{invite.sender}}">
+                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                        </form>
+                    </div>  
+                    {% endfor %}
+                {% endif %}
+            </div>
+        <!--friends-->
         <h4>Friends:</h4>
         {% for friend in friends %}
             <div class="d-inline-flex mb-2">

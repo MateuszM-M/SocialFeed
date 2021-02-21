@@ -1,5 +1,5 @@
 <div class="col-md-10 text-left bg-white rounded my-3 py-1 mx-auto">
-
+    <!--Post author-->
     <div class='col-md-1 pt-3'>
         {% if title != user %}
             <a class="text-decoration-none stretched-link" href="{% url 'Accounts:profile_view' username=post.user %}">
@@ -7,10 +7,11 @@
             </a>
         {% endif %}
     </div>
+    <!--Post text-->
     {{ post.post_text }}
     <br>
     <hr>
-
+    <!--Post navigation-->
     <div class='small d-flex'>
         <form action="{% url 'Posts:like_post' post.id %}" method='POST'>
             {% csrf_token %}
@@ -32,8 +33,35 @@
         {% endif %}
     </div>
     <hr>
-        <div class="d-flex pb-3">
-            <a href="" class="mr-auto ml-3">Comments (0)</a>
-            <a href="" class="mr-3">Add comment</a>
-        </div>
+    <!--Comments navigation-->
+    <div class="d-flex pb-2">
+        <a href="" class="mr-auto ml-3">Comments ({{post.comments.all.count}})</a>
+        <a href="" class="mr-3">Add comment</a>
+    </div>
+        <!--Comments-->
+        {% for comment in post.comments.all %}
+            <div class="bg-light rounded p-2 mb-2 ml-5">
+                <a class="text-decoration-none" href="{% url 'Accounts:profile_view' comment.author %}">
+                <h5>{{ comment.author }}</h5>
+            </a>
+                <div class="mb-2">{{ comment.comment_text }}</div>
+                <div class="small">Added: {{ comment.created_date }}
+                    {% if created_date %}
+                        {{ comment.updated_date }}
+                    {% endif %}
+                    {% if request.user == comment.author %}
+                        <a href="{% url 'Posts:remove_comment' comment.id %}" class="ml-2">remove</a>
+                        <a href="{% url 'Posts:edit_comment' comment.id %}" class="ml-2">edit</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        <!--Comment form-->
+            <form action="{% url "Posts:add_comment" post.id %}" method="POST">
+                {{ comment_form.comment_text }}
+                {% csrf_token %}
+                <input type="submit" value="Add comment">
+            </form>
+
+
 </div>

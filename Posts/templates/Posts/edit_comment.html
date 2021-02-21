@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+
+{% block title %}Edit comment{% endblock %}
+
+{% block content %}
+
+<div class="col-md-10 text-left bg-white rounded my-3 py-1 mx-auto">
+    <h4>{{ comment.author }}</h4>
+
+    <div class="text-center">
+        <form action="" method="POST">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <input type="submit" value="Save">
+        </form>
+    </div>
+
+
+</div>
+
+{% endblock %}

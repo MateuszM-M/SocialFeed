@@ -10,7 +10,7 @@
 
     <div class='bg-light py-2'>
         <div class="text-center">
-            <form action="" method="POST">
+            <form action="{% url "Posts:add_post" %}" method="POST">
                 {{ post_form.post_text }}
                 {% csrf_token %}
                 <input type="submit" value="Post">

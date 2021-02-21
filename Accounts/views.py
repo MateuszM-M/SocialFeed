@@ -5,8 +5,8 @@ from django.contrib.postgres.search import SearchVector
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from Posts.forms import PostForm
-from Posts.models import Post
+from Posts.forms import PostForm, CommentForm
+from Posts.models import Post, Comment
 
 from .decorators import unathenticated_user
 from .forms import *
@@ -21,15 +21,12 @@ def dashboard(request):
     page_number = request.GET.get('page')
     posts = paginator_p.get_page(page_number)
     post_form = PostForm
-    if request.method == 'POST':
-        post_form = PostForm(request.POST)
-        if post_form.is_valid():
-            new_post = post_form.save(commit=False)
-            new_post.user = request.user
-            new_post.save()
-        return redirect('/')
-    return render(request, 'Accounts/dashboard.html', {'posts': posts,
-                                                       'post_form': post_form})
+    comment_form = CommentForm
+    
+    context = {'posts': posts, 'post_form': post_form,
+               'comment_form': comment_form}
+    return render(request, 'Accounts/dashboard.html', context)
+
 
 
 @login_required
@@ -50,17 +47,22 @@ def profile_view(request, username):
                                      receiver=user.profile)
 
     title = user
+    
+    comment_form = CommentForm
 
     contacts = []
     for i in invited:
         contacts.append(request.user.profile)
-    return render(request, 'Accounts/view_profile.html',
-                  {'user': user,
-                   'title': user,
-                   'posts': posts,
-                   'friends': friends,
-                   'contacts': contacts,
-                   'my_invites': my_invites})
+        
+    context = {'user': user,
+               'title': user,
+               'posts': posts,
+               'friends': friends,
+               'contacts': contacts,
+               'my_invites': my_invites,
+               'comment_form': comment_form}
+        
+    return render(request, 'Accounts/view_profile.html', context)
 
 
 @login_required()
