@@ -2,7 +2,6 @@
 
 {% block title %}SocialFeed{% endblock %}
 
-
 {% block content %}
     <div class="text-center my-3">
         <h3>Hi, {{ request.user }}</h3>
@@ -10,10 +9,10 @@
 
     <div class='bg-light py-2'>
         <div class="text-center">
-            <form action="{% url "Posts:add_post" %}" method="POST">
+            <form action="{% url "Posts:add_post" %}" method="POST" class="d-flex justify-content-center my-2">
                 {{ post_form.post_text }}
                 {% csrf_token %}
-                <input type="submit" value="Post">
+                <input type="submit" value="Post" class="btn btn-outline-primary align-self-end ml-2">
             </form>
         </div>
 

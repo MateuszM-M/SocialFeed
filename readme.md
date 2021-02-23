@@ -1,7 +1,7 @@
 # SocialFeed - social media app
 
-Simple social media app created with Django. My main focus was to gain basic skills in web development with this framework, especially to create CRUD with accounts. App is created only by me and it's still in development. 
-Link: https://hello-social-feed.herokuapp.com/
+Simple social media app created with Django. My main focus was to gain new skills in web development with this framework, especially to create CRUD with accounts. App is created only by me and it's still in development. 
+
 
 ## Tech
 
@@ -16,7 +16,7 @@ Link: https://hello-social-feed.herokuapp.com/
  - Registration
  - Changing / reseting password
  - Updating profile
- - CRUD posts
+ - CRUD posts and comments
  - Adding likes to posts
  - Sending, accepting and rejecting invitations
  - Deleting from friends
@@ -27,15 +27,14 @@ Link: https://hello-social-feed.herokuapp.com/
 ## To do
 
  - Tests
- - Adding comments to posts
- - Chat
  - Notifications about firend actions
+ - Advance search
+ - Chat
  - User's picture gallery
  - Posting pictures, films etc on wall
 
 ## Inspiration
 
- - Some parts of code are inspired from:
+ Some parts of code are inspired from:
  - Book: Django 2 by Example by Antonio Mele - mainly account part
  - Tutorial: https://www.youtube.com/watch?v=ozr6NEomLQw&list=PLgjw1dR712joFJvX_WKIuglbR1SNCeno1&ab_channel=Pyplane - adding friends, adding likes
- - Countless stackoverflow threads
