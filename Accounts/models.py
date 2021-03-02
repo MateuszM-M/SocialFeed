@@ -13,7 +13,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=50, blank=True, null=True)
     lastname = models.CharField(max_length=50)
-    gender = models.CharField(max_length=22, choices=GENDER, default='X')
+    gender = models.CharField(max_length=22, choices=GENDER, default='X', blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True)
     city = models.CharField(max_length=50, blank=True)

@@ -55,21 +55,21 @@ def edit_post(request, pk):
     else:
         return redirect('/')
     return render(request, 'Posts/edit_post.html',
-                  {'post_edit_form': post_edit_form,'post': post})
+                  {'post_edit_form': post_edit_form, 'post': post})
     
     
 @login_required
 def like_post(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    liked = False
-    if post.users_like.filter(id=request.user.id).exists():
-        post.users_like.remove(request.user)
-        liked = False
-    else:
-        post.users_like.add(request.user)
-        liked = True
-    post.total_likes = post.users_like.all().count()
-    post.save()
+    post = get_object_or_404(Post, id=pk)
+
+    if request.method == 'POST':
+        if post.users_like.filter(id=request.user.id).exists():
+            post.users_like.remove(request.user)
+        else:
+            post.users_like.add(request.user)
+
+    Post.total_likes_count(post)
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 

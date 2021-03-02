@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.search import SearchVector
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 from Posts.forms import PostForm, CommentForm
 from Posts.models import Post, Comment
 
@@ -120,14 +120,14 @@ def invite(request, username):
                                  username=username,
                                  is_active=True)
         receiver = Profile.objects.get(user=user)
-        contact = Contact.objects.create(sender=sender, receiver=receiver)
-        return redirect(request.META.get('HTTP_REFERER'))
-    return redirect('Accounts:dashboard')
+        Contact.objects.create(sender=sender, receiver=receiver)
+        return redirect(reverse('Accounts:profile_view', args=[receiver]))
 
 
 @login_required
 def accept(request):
     if request.method == 'POST':
+        breakpoint()
         user = request.POST.get('username')
         sender = Profile.objects.get(user__username=user)
         receiver = Profile.objects.get(user=request.user)
@@ -135,8 +135,7 @@ def accept(request):
         contact.status = 'accepted'
         contact.save()
         contact.delete()
-        return redirect(request.META.get('HTTP_REFERER'))
-    return redirect('Accounts:dashboard')
+        return redirect(reverse('Accounts:profile_view', args=[request.user]))
 
 
 @login_required

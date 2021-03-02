@@ -23,7 +23,10 @@ class UserChangePasswordForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super(UserChangePasswordForm, self).__init__(*args, **kwargs)
 
-    new_password1 = forms.CharField(label='New password', widget=forms.PasswordInput)
+    new_password1 = forms.CharField(
+        label='New password',
+        widget=forms.PasswordInput
+    )
 
 
 class UserRegistrationForm(forms.ModelForm):

@@ -7,6 +7,7 @@ Simple social media app created with Django. My main focus was to gain new skill
 
  - Python 3.8
  - Django 3.1
+ - PostgreSQL
  - Bootstrap 4
  - AWS RDS and S3
  - Heroku
@@ -27,7 +28,7 @@ Simple social media app created with Django. My main focus was to gain new skill
 ## To do
 
  - Tests
- - Notifications about firend actions
+ - Notifications about friends actions
  - Advance search
  - Chat
  - User's picture gallery

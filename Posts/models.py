@@ -37,6 +37,10 @@ class Post(models.Model):
         self.slug = slugify(self.post_text[:20])
         super(Post, self).save(*args, **kwargs)
 
+    def total_likes_count(self):
+        self.total_likes = self.users_like.all().count()
+        self.save()
+
 
 class Comment(models.Model):
     STATUS_CHOICES = (
