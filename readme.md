@@ -11,6 +11,7 @@ Simple social media app created with Django. My main focus was to gain new skill
  - Bootstrap 4
  - AWS RDS and S3
  - Heroku
+ - Unittest
  
 ## Features
 
@@ -27,8 +28,7 @@ Simple social media app created with Django. My main focus was to gain new skill
  
 ## To do
 
- - Tests
- - Notifications about friends actions
+ - Notifications about friends' actions
  - Advance search
  - Chat
  - User's picture gallery

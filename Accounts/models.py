@@ -27,12 +27,6 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-    def get_friends(self):
-        return self.friends.objects.all()
-
-    def get_friends_number(self):
-        return self.obcjects.friends.all().count()
-
 
 class ContactManager(models.Manager):
     def invitations_received(self, receiver):

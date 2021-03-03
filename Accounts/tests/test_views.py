@@ -118,7 +118,6 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'Accounts/view_profile.html')
 
-
     def test_invite_friend(self):
         self.client.login(username=self.user1.username,
                           password='my_paSW1')
@@ -128,13 +127,68 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(Contact.objects.all().count(), 1)
 
-    def test_recommended_users(self):
+    def test_accept(self):
+
         self.client.login(username=self.user1.username,
                           password='my_paSW1')
-        url = reverse('Accounts:users')
+        url = reverse('Accounts:invite', args=[self.user2])
         response = self.client.post(url, follow=True)
+
+        self.client.login(username=self.user2.username,
+                          password='my_paSW2')
+        url = reverse('Accounts:accept')
+        response = self.client.post(url, {
+            'username': self.user1,
+        },
+        follow=True)
+
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'Accounts/people.html')
+        self.assertEquals(self.profile1.friends.all().count(), 1)
+        self.assertEquals(Contact.objects.all().count(), 0)
+        self.assertTemplateUsed(response, 'Accounts/view_profile.html')
+
+    def test_reject(self):
+
+        self.client.login(username=self.user1.username,
+                          password='my_paSW1')
+        url = reverse('Accounts:invite', args=[self.user2])
+        response = self.client.post(url, follow=True)
+
+        self.client.login(username=self.user2.username,
+                          password='my_paSW2')
+        url = reverse('Accounts:reject')
+        response = self.client.post(url, {
+            'username': self.user1,
+        },
+        follow=True)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(self.profile1.friends.all().count(), 0)
+        self.assertEquals(Contact.objects.all().count(), 0)
+        self.assertTemplateUsed(response, 'Accounts/view_profile.html')
+
+    def test_delete_friend(self):
+
+        self.client.login(username=self.user1.username,
+                          password='my_paSW1')
+        url = reverse('Accounts:invite', args=[self.user2])
+        response = self.client.post(url, follow=True)
+
+        self.client.login(username=self.user2.username,
+                          password='my_paSW2')
+        url = reverse('Accounts:accept')
+        response = self.client.post(url, {
+            'username': self.user1,
+        },
+        follow=True)
+        self.assertEquals(self.profile1.friends.all().count(), 1)
+
+        url = reverse('Accounts:delete_friend', args=[self.user1])
+        response = self.client.post(url, follow=True)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(self.profile1.friends.all().count(), 0)
+        self.assertTemplateUsed(response, 'Accounts/dashboard.html')
 
     def test_users_friends(self):
         self.client.login(username=self.user1.username,
@@ -144,3 +198,20 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'Accounts/friend_list.html')
 
+    def test_search(self):
+        self.client.login(username=self.user1.username,
+                          password='my_paSW1')
+        url = reverse('Accounts:search')
+        response = self.client.get(url, {
+            'search': 'my_nickname2'
+        }, follow=True)
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'Accounts/search.html')
+
+    def test_recommended_users(self):
+        self.client.login(username=self.user1.username,
+                          password='my_paSW1')
+        url = reverse('Accounts:users')
+        response = self.client.post(url, follow=True)
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'Accounts/people.html')

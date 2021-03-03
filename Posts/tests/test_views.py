@@ -171,19 +171,19 @@ class TestPostViews(TestCase):
         self.assertTemplateUsed(response, 'Accounts/dashboard.html')
         self.assertEquals(Post.objects.all().count(), 1)
 
-    # def test_like_and_unlike_post(self):
-    #     self.factory = RequestFactory()
-    #     post_id = Post.objects.get(slug='initial-post').id
-    #     url = reverse('Posts:like', args=[post_id])
-    #     request = self.factory.post(url)
-    #     request.user = self.user1
-    #     response = like_post(request, post_id)
-    #     self.assertEquals(response.status_code, 302)
-    #     self.assertEquals(Post.objects.get(id=post_id).total_likes, 1)
-    #
-    #     response = like_post(request, post_id)
-    #     self.assertEquals(response.status_code, 302)
-    #     self.assertEquals(Post.objects.get(id=post_id).total_likes, 0)
+    def test_like_and_unlike_post(self):
+        self.factory = RequestFactory()
+        post_id = Post.objects.get(slug='initial-post').id
+        url = reverse('Posts:like_post', args=[post_id])
+        request = self.factory.post(url)
+        request.user = self.user1
+        response = like_post(request, post_id)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(Post.objects.get(id=post_id).total_likes, 1)
+
+        response = like_post(request, post_id)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(Post.objects.get(id=post_id).total_likes, 0)
 
 
 class TestCommentViews(TestCase):

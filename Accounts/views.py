@@ -28,7 +28,6 @@ def dashboard(request):
     return render(request, 'Accounts/dashboard.html', context)
 
 
-
 @login_required
 def profile_view(request, username):
     user = Profile.objects.get(user__username=username)
@@ -127,7 +126,6 @@ def invite(request, username):
 @login_required
 def accept(request):
     if request.method == 'POST':
-        breakpoint()
         user = request.POST.get('username')
         sender = Profile.objects.get(user__username=user)
         receiver = Profile.objects.get(user=request.user)
@@ -146,8 +144,7 @@ def reject(request):
         receiver = Profile.objects.get(user=request.user)
         contact = get_object_or_404(Contact, sender=sender, receiver=receiver)
         contact.delete()
-        return redirect(request.META.get('HTTP_REFERER'))
-    return redirect('Accounts:dashboard')
+        return redirect(reverse('Accounts:profile_view', args=[request.user]))
 
 
 @login_required
