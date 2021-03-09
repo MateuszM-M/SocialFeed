@@ -18,7 +18,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=15, blank=True)
     city = models.CharField(max_length=50, blank=True)
     country = models.CharField(max_length=50, blank=True)
-    profile_picture = models.ImageField(default="profile.png", blank=True, upload_to='images/')
+    profile_picture = models.ImageField(default="images/profile.png", blank=True, upload_to='images/')
     motto = models.CharField(max_length=200, blank=True)
     bio = models.TextField(blank=True)
     friends = models.ManyToManyField(User, related_name='friends', blank=True)
