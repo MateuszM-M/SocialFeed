@@ -61,20 +61,19 @@ def edit_post(request, pk):
 @login_required
 def like_post(request, pk):
     post = get_object_or_404(Post, id=pk)
-
+    next_url = request.POST.get('next', '/')
     if request.method == 'POST':
         if post.users_like.filter(id=request.user.id).exists():
             post.users_like.remove(request.user)
         else:
             post.users_like.add(request.user)
-
     Post.total_likes_count(post)
-
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    return HttpResponseRedirect(next_url)
 
 
 @login_required
 def add_comment(request, pk):
+    next_url = request.POST.get('next', '/')
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -82,7 +81,7 @@ def add_comment(request, pk):
             new_comment.author = request.user
             new_comment.post = Post.objects.get(id=pk)
             new_comment.save()
-        return redirect('/')
+        return HttpResponseRedirect(next_url)
 
 
 @login_required

@@ -15,6 +15,7 @@
     <div class='small d-flex'>
         <form action="{% url 'Posts:like_post' post.id %}" method='POST'>
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
             {% if request.user not in post.users_like.all %}
             <button type='submit' name='post_id' class="btn btn-primary btn-sm mr-2">Like</button>
             {% else %}
@@ -59,6 +60,7 @@
     <form action="{% url "Posts:add_comment" post.id %}" method="POST" class="d-flex">
         {{ comment_form.comment_text }}
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
         <input class="btn btn-outline-secondary align-self-end ml-2" type="submit" value="Add comment">
     </form>
 
