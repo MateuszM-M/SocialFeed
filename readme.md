@@ -1,6 +1,12 @@
 # SocialFeed - social media app
 
-Simple social media app created with Django. My main focus was to gain new skills in web development with this framework, especially to create CRUD with accounts. App is created only by me and it's still in development. 
+Simple social media app created with Django for educational purpose. My main focus was to conslidate knowledge acquired during doing tutorials, especially to create CRUD with accounts, write tests. App is created only by me and it's still in development. 
+
+![Alt text](static/images/screens/screen1.png "Login Page")
+![Alt text](static/images/screens/screen2.png "Dashboard")
+![Alt text](static/images/screens/screen3.png "Profile")
+![Alt text](static/images/screens/screen4.png "Viewing users and dropdown list")
+
 
 
 ## Tech
