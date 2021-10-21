@@ -9,10 +9,10 @@ ALLOWED_HOSTS = ["hello-social-feed.herokuapp.com", "127.0.0.1", "herokuapp.com"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "SocialFeedDB",
-        "USER": "SFDB",
+        "NAME": "d1pv0ck75i4hhi",
+        "USER": "ftsecyhjiexuzc",
         "PASSWORD": os.environ.get("SOCIALFEED_DB_PASSWORD"),
-        "HOST": "socialfeeddb.cijqn9skmpbv.eu-central-1.rds.amazonaws.com",
+        "HOST": "ec2-79-125-59-247.eu-west-1.compute.amazonaws.com",
         "PORT": "5432",
     }
 }
