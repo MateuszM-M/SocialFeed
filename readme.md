@@ -63,6 +63,8 @@ Install required packages `pip install -r requirements.txt`,
 
 Rename MMblog/settings/`.env-example` to `.env`,
 
+Create local postgres database and type credentials in SocialFeed/settings/dev.py
+
 Migrate database `python manage.py migrate`,
 
 Create superuser `python manage.py createsuperuser`,
