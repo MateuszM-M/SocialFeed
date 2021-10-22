@@ -77,6 +77,8 @@ Or
 
 Online demo: https://hello-social-feed.herokuapp.com/
 
+example account: username: `john`, password: `johnjohn`
+
 ## Inspiration
 
  Some parts of code are inspired from:
