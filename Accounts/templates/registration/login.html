@@ -20,6 +20,10 @@
         <a href="{% url 'Accounts:password_reset' %}" class="small">Forgot password?</a>
         <hr>
         <a href="{% url 'Accounts:register' %}" class="btn btn-success px-5 mb-3">Create new account</a>
+        <br>
+        <div class="mb-3">
+            <a href="{% url 'Accounts:login_without_credentials' %}">CLICK HERE TO LOGIN WITHOUT CREDENTIALS</a>
+        </div>
     </div>
 </div>
 

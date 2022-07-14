@@ -6,11 +6,10 @@
 * [Features](#features)
 * [To do](#to-do)
 * [Setup](#setup)
-* [Inspiration](#inspiration)
 
 ## General info
 
-Simple social media app created with Django for educational purpose. My main focus was to conslidate knowledge acquired during doing tutorials, especially to create CRUD with accounts, write tests. App is created only by me.
+Simple social media app created with Django for educational purpose. My main focus was to consolidate knowledge acquired during doing tutorials, especially to create CRUD with accounts, write tests. App is created only by me.
 
 ![Alt text](static/images/screens/screen1.png "Login Page")
 ![Alt text](static/images/screens/screen2.png "Dashboard")
@@ -30,13 +29,13 @@ Simple social media app created with Django for educational purpose. My main foc
  
 ## Features
 
+ - CRUD posts and comments
+ - Adding/removing likes to posts
+ - Sending, accepting and rejecting invitations
+ - Updating profile
+ - Deleting from friends
  - Registration
  - Changing / reseting password
- - Updating profile
- - CRUD posts and comments
- - Adding likes to posts
- - Sending, accepting and rejecting invitations
- - Deleting from friends
  - Searching users
  - Adding profile picture
  - Pagination
@@ -44,12 +43,15 @@ Simple social media app created with Django for educational purpose. My main foc
 ## To do
 
  - Notifications about friends' actions
- - Advance search
- - Chat
+ - More advanced search and recommendations
  - User's picture gallery
  - Posting pictures, films etc on wall
 
 ## Setup 
+
+Online demo: https://hello-social-feed.herokuapp.com/
+
+Or if you want to check it on local machine:
 
 Clone repo `git clone https://github.com/MateuszM-M/SocialFeed`,
 
@@ -61,26 +63,16 @@ Activate environment `venv\scripts\activate`,
 
 Install required packages `pip install -r requirements.txt`,
 
-Rename MMblog/settings/`.env-example` to `.env`,
+Rename MMblog/settings/ `.env-example` to `.env`,
 
 Create local postgres database and type credentials in SocialFeed/settings/dev.py
 
 Migrate database `python manage.py migrate`,
+
+Load inital data `python manage.py loaddata fixtures/data.json`
 
 Create superuser `python manage.py createsuperuser`,
 
 Make server up and running `python manage.py runserver`,
 
 Browse http://127.0.0.1:8000/
-
-Or
-
-Online demo: https://hello-social-feed.herokuapp.com/
-
-example account: username: `john`, password: `johnjohn`
-
-## Inspiration
-
- Some parts of code are inspired from:
- - Book: Django 2 by Example by Antonio Mele - mainly account part
- - Tutorial: https://www.youtube.com/watch?v=ozr6NEomLQw&list=PLgjw1dR712joFJvX_WKIuglbR1SNCeno1&ab_channel=Pyplane - adding friends, adding likes
