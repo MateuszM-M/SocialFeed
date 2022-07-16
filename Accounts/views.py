@@ -182,3 +182,14 @@ def recommended_users(request):
     people = paginator.get_page(page_number)
     return render(request, 'Accounts/people.html',
                   {'people': people})
+
+
+
+def login_without_credentials(request):
+    user = User.objects.get(id=2)
+
+    if user is not None:
+        login(request, user)
+        return redirect('Accounts:dashboard')
+    else:
+        messages.info(request, 'Username or password is incorrect')

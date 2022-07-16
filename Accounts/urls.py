@@ -10,6 +10,11 @@ urlpatterns = [
         form_class=UserLoginForm,
         redirect_authenticated_user=True),
          name='login'),
+
+     path('login-without-credentials/',
+          views.login_without_credentials,
+          name='login_without_credentials'),
+
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', views.dashboard, name='dashboard'),
 
