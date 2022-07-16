@@ -65,9 +65,7 @@ Rename MMblog/settings/`.env-example` to `.env`,
 
 Create local postgres database and type credentials in SocialFeed/settings/dev.py
 
-Migrate database `python manage.py migrate`,
-
-Create superuser `python manage.py createsuperuser`,
+Load inital data `python manage.py loaddata fixtures/data.json`
 
 Make server up and running `python manage.py runserver`,
 
@@ -77,10 +75,5 @@ Or
 
 Online demo: https://hello-social-feed.herokuapp.com/
 
-example account: username: `john`, password: `johnjohn`
 
-## Inspiration
 
- Some parts of code are inspired from:
- - Book: Django 2 by Example by Antonio Mele - mainly account part
- - Tutorial: https://www.youtube.com/watch?v=ozr6NEomLQw&list=PLgjw1dR712joFJvX_WKIuglbR1SNCeno1&ab_channel=Pyplane - adding friends, adding likes
